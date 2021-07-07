@@ -3,7 +3,7 @@ var fs = require('fs');
 var url = require('url');
 var qs = require('querystring');
 
-const inPort = 3000;            // 내부 포트 번호
+const inPort = 4000;            // 내부 포트 번호
 
 var app = http.createServer(function(request, response) {
     fs.readFile('data.json', function(error, data) {

@@ -17,10 +17,9 @@ class MasterViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        objects.append("D")
-        objects.append("E")
-        objects.append("F")
-        objects.append("G")
+        if let localData = self.readLocalFile(forName: "PW00003877") {
+            self.parse(jsonData: localData)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -61,3 +60,38 @@ class MasterViewController: UITableViewController {
     }
 }
 
+
+// MARK:- API Call
+extension MasterViewController {
+    private func readLocalFile(forName name: String) -> Data? {
+        do {
+            if let bundlePath = Bundle.main.path(forResource: name,
+                                                 ofType: "json"),
+                let jsonData = try String(contentsOfFile: bundlePath).data(using: .utf8) {
+                return jsonData
+            }
+        } catch {
+            print(error)
+        }
+        
+        return nil
+    }
+    
+    private func parse(jsonData: Data) {
+        do {
+            let decodedData = try JSONDecoder().decode(Entry.self,
+                                                       from: jsonData)
+            
+            if let tmp = decodedData.senses {
+                tmp.forEach {
+                    if $0.id != nil {
+                        objects.append($0.id!)
+                    }
+                }
+            }
+            
+        } catch {
+            print("decode error")
+        }
+    }
+}
