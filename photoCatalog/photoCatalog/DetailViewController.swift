@@ -10,22 +10,27 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
-    @IBOutlet weak var detailDescriptionLabel: UILabel!
-
-
+    
+    @IBOutlet weak var imageView: UIImageView!
+    
     func configureView() {
         // Update the user interface for the detail item.
         if let detail = detailItem {
-            if let label = detailDescriptionLabel {
-                label.text = detail as? String
-            }
+            print(detail as! String)
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        configureView()
+//        configureView()
+        
+        let stringURL = "https://grepp-programmers-challenges.s3.ap-northeast-2.amazonaws.com/2020-flo/cover.jpg"
+        if let url = URL(string: stringURL) {
+            if let data = NSData(contentsOf: url) {
+                imageView.image = UIImage(data: data as Data)
+            }
+        }
     }
 
     var detailItem: AnyObject? {
